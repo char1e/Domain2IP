@@ -5,10 +5,12 @@ import openpyxl
 from openpyxl import Workbook
 
 def showBanner():
-    print('python3 domain2ip.py <filePath>or<dirPath>')
-    print('filePath includes xlsx or txt or NULLEXT')
-    print('   authored by rhaps')
-    print('\n')
+    banner = """
+    usage: python3 domain2ip.py <filePath>or<dirPath>
+    filePath includes xlsx or txt or NULLEXT
+                            authored by rhaps
+    """
+    print(banner)
 
 
 def dnsProcess(target):
@@ -23,7 +25,6 @@ def dnsProcess(target):
             domain = 'www.' + domain
         #最后不能有/
         domain = domain.rstrip('/')
-        print(22)
         ipList = []
         try:
             print('Processing:%s' % (domain))
@@ -34,7 +35,6 @@ def dnsProcess(target):
                     ipList.append(item[4][0])
         except Exception as e:
             print(str(e))
-            pass
 
     else:
         # 传入的就是IP地址
@@ -42,7 +42,6 @@ def dnsProcess(target):
         ip = ip[0]
         print(ip)
         ipList.append(ip)
-
     print(ipList)
     return ipList
 
@@ -55,7 +54,6 @@ def xlsxFileProcess(filePathName, filePath, fileName):
         excelRowCount = count + 1
         urlOrIp = row[0].value
         ipList = dnsProcess(urlOrIp)
-        print(63)
         print(ipList)
         try:
             if len(ipList):
@@ -85,8 +83,6 @@ def txtFileProcess(filePathName, filePath, fileName):
 
 
     newXlsxFileName = fileName + '.xlsx'
-    print(88)
-    print(newXlsxFileName)
     wb.save(filePath + '/' + newXlsxFileName)
     #处理xlsx文档
     xlsxFileProcess(filePath + '/' + newXlsxFileName, filePath, newXlsxFileName)
@@ -108,11 +104,8 @@ def dirProcess(targetsDir):
             #fileName是单纯的文件名，filePathName是完整的文件路径
             if not fileName.startswith('.'):
                 filePathName = os.path.join(os.getcwd(), filePath, fileName)
-                print(110)
                 print(filePathName)
-                print(114)
                 print(filePath)
-                print(115)
                 print(fileName)
                 fileProcess(filePathName, filePath, fileName)
 
@@ -124,24 +117,17 @@ if __name__ == "__main__":
             targets = input("please input valid targetPath")
         if os.path.isdir(targets):
             # 用户输入的是文件夹
-            targetsDir = targets
-            dirProcess(targetsDir)
+            dirProcess(targets)
         elif os.path.isfile(targets):
             # 用户输入的是文件
             targetsFile = targets
             (path, file) = os.path.split(targetsFile)
             if not path:
                 path = os.getcwd()
-            print(137)
-            print(targetsFile)
-            print(path)
-            print(file)
-            print(file)
             fileProcess(targetsFile, path, file)
         else:
             # 用户输入的路径无效
             showBanner()
-            pass
     except Exception as e:
         print(str(e))
         showBanner()
